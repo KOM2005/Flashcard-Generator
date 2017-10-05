@@ -4,15 +4,15 @@ var inquirer = require('inquirer');
 // Import the flash cards constructor implementations
 var flashCards = require('./flashCards.js');
 // Import the full list of questions
-var questions = require('./questions.js').questions;
+var questions = require('./questions.js').questions;  //why this argument .questions???
 
 // Variable that holds the cloze-deleted questions list
-var closeQuestions = [];
+var clozeQuestion = [];
 
 // Populate the cloze-deleted questions list
 for (var i = 0; i < questions.length; i++) {
 	var q = new flashCards.ClozeCard(questions[i].full, questions[i].cloze);
-	closeQuestions.push(q);
+	clozeQuestion.push(q);
 }
 
 // What question the user is currently on
@@ -27,14 +27,14 @@ function askQuestion() {
 	inquirer.prompt([
 		{
 			type: 'input',
-			message: closeQuestions[currentQuestion].partial + '\nAnswer: ',
+			message: clozeQuestion[currentQuestion].partial + '\nAnswer: ',
 			name: 'userGuess'
 		}
 	]).then(function (answers) {
 		console.log('\n');
 
 		// Check if the user has guessed correctly
-		if (answers.userGuess.toLowerCase() === closeQuestions[currentQuestion].cloze.toLowerCase()) {
+		if (answers.userGuess.toLowerCase() === clozeQuestion[currentQuestion].cloze.toLowerCase()) {
 			console.log('Correct!');
 			answerRight++;
 		} else {
@@ -43,11 +43,11 @@ function askQuestion() {
 		}
 
 		// Show the correct answer
-		console.log(closeQuestions[currentQuestion].full);
+		console.log(clozeQuestion[currentQuestion].full);
 		console.log('-------------------------------------\n');
 
 		// Advance to the next question
-		if (currentQuestion < closeQuestions.length - 1) {
+		if (currentQuestion < clozeQuestion.length - 1) {
 			currentQuestion++;
 			askQuestion();
 		} else {
